@@ -4,8 +4,11 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#ifndef __SHELL_H__
+#define __SHELL_H__
+
 #define MAXLINE 1024
-char *prompt = "kdsh$ ";
+
 // Defining maximum number of arguments that can be passed. 
 #define MAXARGS 64
 
@@ -22,3 +25,5 @@ int parse(const char *cmdline, struct command *cmd);
 void error(char *msg);
 void runSystemCommand(struct command *cmd, int bg);
 void runBuiltinCommand(struct command *cmd, int bg); 
+
+#endif

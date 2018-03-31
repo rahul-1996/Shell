@@ -1,4 +1,4 @@
-#include "helper_functions.c"
+#include "shell.h"
 
 void eval(char *cmdline) {
   int bg;
@@ -16,6 +16,7 @@ void eval(char *cmdline) {
 }
 
 int main(int argc, char *argv[]) {
+    char *prompt = "kdsh$ ";
     char cmdline[MAXLINE]; //command line for fgets.
     while(1) {
         printf("%s", prompt);
