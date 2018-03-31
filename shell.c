@@ -1,3 +1,4 @@
+#include "helper_functions.c"
 
 void eval(char *cmdline) {
   int bg;
@@ -5,16 +6,21 @@ void eval(char *cmdline) {
   printf("Evaluating '%s'\n", cmdline);
   // parse line into command struct
   bg = parse(cmdline, &cmd); 
-  // parse error
+  // ERROR
   if (bg == -1) return;
+  if (cmd.argv[0] == NULL) return;
+  if (cmd.builtin == SYSTEM) 
+    runSystemCommand(&cmd, bg);
+  else 
+    runBuiltinCommand(&cmd, bg);
 }
 
 int main(int argc, char *argv[]) {
     char cmdline[MAXLINE]; //command line for fgets.
     while(1) {
         printf("%s", prompt);
-        // Check for error.
-    if ((fgets(cmdline, MAXLINE, stdin) == NULL) && ferror(stdin)) {
+        // Error?
+        if ((fgets(cmdline, MAXLINE, stdin) == NULL) && ferror(stdin)) {
             printf("Error in taking input.");
         }
         // tests the end-of-file indicator for the stream
