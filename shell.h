@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
+#include <fcntl.h>
 #include <stdbool.h>
 #include <sys/wait.h>
 
@@ -31,4 +32,5 @@ void runBuiltinCommand(struct command *cmd, int bg);
 void sigint_handler(int sig);
 void sigstp_handler(int sig);
 void pipe_execute(char *argv[]) ;
+void IOhandler(char *args[], char* input, char* output) ;
 #endif

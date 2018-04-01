@@ -7,7 +7,7 @@
 enum builtin_t parseBuiltin(struct command *cmd) {
     if (!strcmp(cmd->argv[0], "quit")) { // quit command
         return QUIT;
-    } else if (!strcmp(cmd->argv[0], "history")) { // jobs command
+    } else if (!strcmp(cmd->argv[0], "history")) { // history command
         return HISTORY;     
     } else {
         return SYSTEM;
@@ -24,6 +24,9 @@ int parse(const char *cmdline, struct command *cmd) {
     char *endline;                        // ptr to the end of the cmdline string
     int is_bg; // Run in the background?
 
+    char *arguments[64];
+    int argument_count = 0;
+   // printf("\n argument count is %d", argument_count);
     // Nothing is entered? AMAZING
     if (cmdline == NULL) 
         error("command line is NULL\n");
@@ -47,7 +50,7 @@ int parse(const char *cmdline, struct command *cmd) {
 
         // terminate the token
         *token = '\0';
-        // printf("line is %s \n", line);
+        //printf("line is %s \n", line);
         // Record token as the token argument
         cmd->argv[cmd->argc++] = line;
 
@@ -59,9 +62,17 @@ int parse(const char *cmdline, struct command *cmd) {
         // Check if argv is full
         if (cmd->argc >= MAXARGS-1) break;
 
+		if ( (strcmp(line,">") != 0) && (strcmp(line,"<") != 0) && (strcmp(line,"&") != 0)) {
+            arguments[argument_count] = line;
+            argument_count += 1;
+        }
+
         line = token + 1;
     }
 
+    for(int i=0;i<argument_count;i++) {
+        printf("\nargument is %s", arguments[i]);
+    }
    // Testing
    // printf("argument is %s \n", cmd->argv[1]);
    // printf("Total no of commands is %d \n", cmd->argc);
@@ -79,8 +90,37 @@ int parse(const char *cmdline, struct command *cmd) {
     if ((is_bg = (*cmd->argv[cmd->argc-1] == '&')) != 0)
         cmd->argv[--cmd->argc] = NULL;
 
-      printf("\n hasPipe? %d \n", cmd->hasPipe);
+//      printf("\n hasPipe? %d \n", cmd->hasPipe);
+
+
+    // Handling redirection.
+
+    // > indicates output redirection. 
+
+    for(int i=0; i < cmd->argc; i++) {
+        if(strcmp(cmd->argv[i], ">") == 0) {
+            if(cmd->argv[i+1]==NULL) error("Need more arguments");
+            IOhandler(arguments, NULL, cmd->argv[i+1]);
+        }
+    }
 
     return is_bg;
+}
+
+void IOhandler(char *args[], char* input, char* output) {
+    __pid_t pid;
+    int fd;
+    pid = fork();
+    if(pid==-1) error("Could not fork");
+    if(pid==0) {
+        fd = open(output, O_CREAT | O_TRUNC | O_WRONLY, 0600); 
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+        if (execvp(args[0],args)== -1){
+			error("error in execvp");
+			kill(getpid(),SIGTERM);
+		}
+    }
+    waitpid(pid,NULL,0);
 }
 
