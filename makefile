@@ -20,5 +20,8 @@ helper_functions.o: helper_functions.c
 pipe.o: pipe.c
 		$(CC) $(CFLAGS) pipe.c
 
+editor: editor.c
+	$(CC) editor.c -o editor -Wall -Wextra -pedantic -std=c99
+
 clean: 
 	rm -rf *.o

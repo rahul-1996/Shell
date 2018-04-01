@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include <sys/wait.h>
 
 #ifndef __SHELL_H__
