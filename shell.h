@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
+#include <stdbool.h>
 #include <sys/wait.h>
 
 #ifndef __SHELL_H__
@@ -17,6 +19,7 @@ struct command {
     char *argv[MAXARGS];
     enum builtin_t {
         SYSTEM, QUIT, HISTORY } builtin;
+    bool hasPipe;
 };
     
 
@@ -25,5 +28,7 @@ int parse(const char *cmdline, struct command *cmd);
 void error(char *msg);
 void runSystemCommand(struct command *cmd, int bg);
 void runBuiltinCommand(struct command *cmd, int bg); 
-
+void sigint_handler(int sig);
+void sigstp_handler(int sig);
+void pipe_execute(char *argv[]) ;
 #endif

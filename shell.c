@@ -3,9 +3,12 @@
 void eval(char *cmdline) {
   int bg;
   struct command cmd;
+  cmd.hasPipe = false;
+  bool hasPipe = false;
   printf("Evaluating '%s'\n", cmdline);
   // parse line into command struct
   bg = parse(cmdline, &cmd); 
+  printf("\n hasPipe? %d \n", cmd.hasPipe);
   // ERROR
   if (bg == -1) return;
   if (cmd.argv[0] == NULL) return;
@@ -36,5 +39,8 @@ int main(int argc, char *argv[]) {
         // Evaluate command line. 
         eval(cmdline);
     }
+
+    // Signal Handlers
+   //Signal(SIGINT,  sigint_handler);   // ctrl-c
 }
 
