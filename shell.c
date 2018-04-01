@@ -1,7 +1,7 @@
 #include "shell.h"
 
-int NO_OF_COMMANDS = 0;
-
+int NO_OF_COMMANDS = -1;
+int NO_OF_ALIASES = 0;
 
 
 void eval(char *cmdline) {
@@ -23,19 +23,33 @@ void eval(char *cmdline) {
 
 void initializeShell() {
 
-	for(int i=0;i<HISTORY_SIZE;i++)
+ // Manage Environment variables. 
+
+    // Taking care of history stuff.
+    for(int i=0;i<HISTORY_SIZE;i++)
 	{
 		History[i].command=(char*)malloc(sizeof(char)*MAXLINE);
     }
+
+    // Aliases.
+    for(int i=0;i<ALIAS_SIZE;i++) {
+        AliasTable[i].key = (char*)malloc(sizeof(char)*MAXLINE);
+        AliasTable[i].value = (char*)malloc(sizeof(char)*MAXLINE);
+    }
+
     NO_OF_COMMANDS = -1;
+    NO_OF_ALIASES = 0;
 }
+
 
 int main(int argc, char *argv[]) {
     char *prompt = "kdsh$ ";
     char cmdline[MAXLINE]; //command line for fgets.
     initializeShell();
     while(1) {
+        printf(C_BLUE);
         printf("%s", prompt);
+        printf(C_GREEN);
         // Error?
         if ((fgets(cmdline, MAXLINE, stdin) == NULL) && ferror(stdin)) {
             printf("Error in taking input.");
@@ -51,7 +65,23 @@ int main(int argc, char *argv[]) {
 
         // Updating Number of Commands. 
         NO_OF_COMMANDS += 1;
+
+        // Update the command entered for history. 
         updateHistoryCommand(cmdline);
+
+        //Checking.
+        // printf("\n NO OF ALIASES ARE %d", NO_OF_ALIASES);
+        // if(NO_OF_ALIASES>0) {printf("ASASAS");getAliases();}
+
+        // Check if it is an alias beforte evaluating. 
+        for(int i=0;i<NO_OF_ALIASES;i++) {
+            if(strcmp(AliasTable[i].key, cmdline)==0) {
+                // printf("hi there");
+                strcpy(cmdline,AliasTable[i].value);
+                }
+        }
+
+       // printf("Finally %s\n", cmdline);
         // Evaluate command line. 
         eval(cmdline);
     }

@@ -5,8 +5,8 @@ CFLAGS= -c
 
 all: main
 
-main: shell.o helper_functions.o parse.o pipe.o history.o
-	  $(CC) shell.o helper_functions.o parse.o pipe.o history.o
+main: shell.o helper_functions.o parse.o pipe.o history.o alias.o
+	  $(CC) shell.o helper_functions.o parse.o pipe.o history.o alias.o
 
 shell.o: shell.c
 		$(CC) $(CFLAGS) shell.c
@@ -22,6 +22,9 @@ pipe.o: pipe.c
 
 history.o: history.c
 		$(CC) $(CFLAGS) history.c
+
+alias.o: alias.c
+		$(CC) $(CFLAGS) alias.c
 
 editor: editor.c
 	$(CC) editor.c -o editor -Wall -Wextra -pedantic -std=c99

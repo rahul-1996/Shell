@@ -20,6 +20,8 @@ void runBuiltinCommand(struct command *cmd, int bg) {
             exit(0); break;
         case HISTORY:
             getHistory(); break;
+        case ALIAS:
+            createAlias(cmd); break;
         default:
             error("Unknown builtin command");
     }

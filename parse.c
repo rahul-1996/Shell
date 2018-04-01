@@ -9,7 +9,10 @@ enum builtin_t parseBuiltin(struct command *cmd) {
     } else if (!strcmp(cmd->argv[0], "history")) { // history command
         //updateHistory(getpid());
         return HISTORY;
-    } else {
+    } else if (!strcmp(cmd->argv[0], "alias")) { // Alias command
+        return ALIAS;
+    }
+     else {
         //updateHistory(getpid());
         return SYSTEM;
     }
@@ -54,6 +57,7 @@ int parse(const char *cmdline, struct command *cmd) {
         //printf("line is %s \n", line);
         // Record token as the token argument
         cmd->argv[cmd->argc++] = line;
+
 
         // Check if pipe and add it. 
         if(strcmp(line,"|")==0) {
@@ -107,6 +111,8 @@ int parse(const char *cmdline, struct command *cmd) {
 
     return is_bg;
 }
+
+
 
 void IOhandler(char *args[], char* input, char* output) {
     __pid_t pid;
