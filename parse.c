@@ -1,6 +1,5 @@
 #include "shell.h"
 
-
 //################ PARSING ##############################
 
 
@@ -8,8 +7,10 @@ enum builtin_t parseBuiltin(struct command *cmd) {
     if (!strcmp(cmd->argv[0], "quit")) { // quit command
         return QUIT;
     } else if (!strcmp(cmd->argv[0], "history")) { // history command
-        return HISTORY;     
+        //updateHistory(getpid());
+        return HISTORY;
     } else {
+        //updateHistory(getpid());
         return SYSTEM;
     }
 }
@@ -70,9 +71,9 @@ int parse(const char *cmdline, struct command *cmd) {
         line = token + 1;
     }
 
-    for(int i=0;i<argument_count;i++) {
-        printf("\nargument is %s", arguments[i]);
-    }
+    // for(int i=0;i<argument_count;i++) {
+    //     printf("\nargument is %s", arguments[i]);
+    // }
    // Testing
    // printf("argument is %s \n", cmd->argv[1]);
    // printf("Total no of commands is %d \n", cmd->argc);

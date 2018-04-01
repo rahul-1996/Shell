@@ -89,8 +89,11 @@ void pipe_execute(char *args[]) {
 			if (execvp(command[0],command)==err){
 				kill(getpid(),SIGTERM);
 			}		
-		}			
-		// CLOSING DESCRIPTORS ON PARENT
+        }
+        // Updating history PID
+        updateHistoryPID(pid);			
+        // CLOSING DESCRIPTORS ON PARENT
+        
 		if (i == 0){
 			close(kd[1]);
 		}

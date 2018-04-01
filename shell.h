@@ -16,6 +16,7 @@
 // Defining maximum number of arguments that can be passed. 
 #define MAXARGS 64
 
+#define HISTORY_SIZE 25
 struct command {
     int argc;
     char *argv[MAXARGS];
@@ -23,7 +24,17 @@ struct command {
         SYSTEM, QUIT, HISTORY } builtin;
     bool hasPipe;
 };
-    
+
+struct history
+{
+	char* command;
+	pid_t pid;
+};
+
+struct history History[HISTORY_SIZE];
+
+extern int NO_OF_COMMANDS;
+
 
 void eval(char *cmdline);
 int parse(const char *cmdline, struct command *cmd);
@@ -34,4 +45,9 @@ void sigint_handler(int sig);
 void sigstp_handler(int sig);
 void pipe_execute(char *argv[]) ;
 void IOhandler(char *args[], char* input, char* output) ;
+void getHistory();
+void updateHistoryPID(int pid);
+void updateHistoryCommand(char *cmdline);
+
+
 #endif
