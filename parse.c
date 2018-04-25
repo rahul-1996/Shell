@@ -12,6 +12,15 @@ enum builtin_t parseBuiltin(struct command *cmd) {
     } else if (!strcmp(cmd->argv[0], "alias")) { // Alias command
         return ALIAS;
     }
+    else if (!strcmp(cmd->argv[0], "cd")) { // Alias command
+        return CD;
+    }
+    else if (!strcmp(cmd->argv[0], "sgown")) { // Alias command
+        return SGOWN;
+    }
+    else if (!strcmp(cmd->argv[0], "news")) { // Alias command
+        return NEWS;
+    }
      else {
         //updateHistory(getpid());
         return SYSTEM;
@@ -40,6 +49,7 @@ int parse(const char *cmdline, struct command *cmd) {
 
     (void) strncpy(line, cmdline, MAXLINE);
     endline = line + strlen(line);
+//    printf("endline is %s", endline);
 
     // build argv list
     cmd->argc = 0;
@@ -48,15 +58,15 @@ int parse(const char *cmdline, struct command *cmd) {
         // skip delimiters
         line += strspn (line, delims);
         if (line >= endline) break;
-
+     //   printf("line is %s\n", line);
         // Find token delimiter
         token = line + strcspn (line, delims);
-
         // terminate the token
         *token = '\0';
         //printf("line is %s \n", line);
         // Record token as the token argument
         cmd->argv[cmd->argc++] = line;
+
 
 
         // Check if pipe and add it. 
@@ -73,6 +83,9 @@ int parse(const char *cmdline, struct command *cmd) {
         }
 
         line = token + 1;
+
+      //  printf("Token is %s\n", token-1);
+
     }
 
     // for(int i=0;i<argument_count;i++) {

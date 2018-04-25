@@ -80,7 +80,7 @@ void pipe_execute(char *args[]) {
 				if (i % 2 != 0){
 					dup2(kd[0],STDIN_FILENO); 
 					dup2(fd[1],STDOUT_FILENO);
-				}else{ // for even i
+				}else { // for even i
 					dup2(fd[0],STDIN_FILENO); 
 					dup2(kd[1],STDOUT_FILENO);					
 				} 
@@ -113,6 +113,7 @@ void pipe_execute(char *args[]) {
 				close(kd[1]);
 			}
 		}
+		//Parent
 		waitpid(pid,NULL,0);
 		i++;	
 	}

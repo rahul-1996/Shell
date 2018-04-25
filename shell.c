@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
         // tests the end-of-file indicator for the stream
         if(feof(stdin)) {
             printf("\n"); exit(0);
-        }
+      }
         
         //Remove trailing newline. 
         cmdline[strlen(cmdline)-1] = '\0';

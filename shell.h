@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include<dirent.h>
 #include <sys/wait.h>
 
 #ifndef __SHELL_H__
@@ -22,7 +23,7 @@ struct command {
     int argc;
     char *argv[MAXARGS];
     enum builtin_t {
-        SYSTEM, QUIT, HISTORY, ALIAS } builtin;
+        SYSTEM, QUIT, HISTORY, ALIAS, CD, SGOWN, NEWS } builtin;
     bool hasPipe;
 };
 
@@ -67,5 +68,8 @@ void updateHistoryCommand(char *cmdline);
 void createAlias(struct command *cmd);
 void checkAlias(char (*cmdline)[1024]);
 void getAliases();
+// Custom Functions
 
+void sgown(char *name, char * searchstring);
+void checkNews(struct command *cmd);
 #endif
